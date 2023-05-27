@@ -11,6 +11,6 @@ export default async (app: FastifyInstance) => {
   ApiHelper.get<{}, {}, {}>(
     app,
     "/",
-    productsController.productsController.bind(productsController)
+    productsController.createProduct.bind(productsController)
   );
 };

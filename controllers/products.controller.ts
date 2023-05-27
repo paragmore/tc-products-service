@@ -7,7 +7,7 @@ export class ProductsController {
   constructor(
     @inject(ProductsService) private productsService: ProductsService
   ) {}
-  productsController: ApiHelperHandler<{}, {}, {}, {}, IReply> = async (
+  createProduct: ApiHelperHandler<{}, {}, {}, {}, IReply> = async (
     request,
     reply
   ) => {
