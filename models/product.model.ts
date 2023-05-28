@@ -84,7 +84,7 @@ const productSchema = new Schema({
     type: Boolean,
   },
   unit: { type: unitSchema, required: true },
-  purchaseUnit: { type: unitSchema, required: true },
+  purchaseUnit: { type: unitSchema },
   gstPercentage: {
     type: Number,
   },
@@ -93,4 +93,4 @@ const productSchema = new Schema({
   },
 });
 
-export const Product = mongoose.model("Product", productSchema);
+export const ProductModel = mongoose.model("Product", productSchema);

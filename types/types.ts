@@ -1,46 +1,63 @@
 import { Document, Schema, Types } from "mongoose";
 
-interface VariantProperties {
+interface VariantPropertiesI {
   [key: string]: string;
 }
 
-interface Variant {
-  properties: VariantProperties;
+interface VariantI {
+  properties: VariantPropertiesI;
   stockQuantity: number;
 }
 
-interface Unit {
+interface UnitI {
   quantity: number;
   name: string;
   conversion?: number;
 }
 
-interface Discount {
+interface DiscountI {
   volumeThreshold: number;
   discountPercentage: number;
 }
 
-interface Product {
+interface ProductI {
   storeId: Types.ObjectId;
   name: string;
   description?: string;
   sellsPrice: number;
   purchasePrice?: number;
   category: string;
-  variants: Variant[];
+  variants: VariantI[];
   heroImage?: string;
   images: string[];
   slug: string;
   quantity: number;
-  discounts: Discount[];
+  discounts: DiscountI[];
   hsnCode?: string;
   taxIncluded?: boolean;
-  unit: Unit;
-  purchaseUnit: Unit;
+  unit: UnitI;
+  purchaseUnit?: UnitI;
   gstPercentage?: number;
   deliveryTime?: string;
 }
 
-interface ProductDocument extends Document, Product {}
+interface ProductDocument extends Document, ProductI {}
 
-export { VariantProperties, Variant, Unit, Discount, Product, ProductDocument };
+export {
+  VariantPropertiesI,
+  VariantI,
+  UnitI,
+  DiscountI,
+  ProductI,
+  ProductDocument,
+};
+
+export interface CreateProductRequestI extends ProductI {}
+
+export interface GetProductsQueryParamsI {
+    pageSize?: string;
+    page?: string;
+    sortingPattern?: string;
+    sC?: string;
+  }
+  

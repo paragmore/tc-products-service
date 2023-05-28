@@ -11,7 +11,7 @@ import { config } from 'dotenv';
 
 // Load environment variables from .env file
 config();
-const PORT = parseInt(process.env.PORT || "8005");
+const PORT = parseInt(process.env.PORT || "8015");
 const app: FastifyInstance = fastify({ logger: true, disableRequestLogging: true });
 
 
