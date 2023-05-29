@@ -39,6 +39,13 @@ interface ProductI {
   purchaseUnit?: UnitI;
   gstPercentage?: number;
   deliveryTime?: string;
+  isInventory?: boolean;
+  inventoryProducts?: InventoryProductI[];
+}
+
+export interface InventoryProductI {
+  productId: Types.ObjectId;
+  amountConsumed: number;
 }
 
 interface ProductDocument extends Document, ProductI {}
@@ -56,7 +63,7 @@ export interface CategoryI {
   name: string;
   description: string;
   storeId: Types.ObjectId;
-  slug?:string
+  slug?: string;
 }
 
 export interface CreateCategoryRequestI extends CategoryI {}

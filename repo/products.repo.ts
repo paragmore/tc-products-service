@@ -37,6 +37,8 @@ export class ProductsRepo {
       gstPercentage,
       deliveryTime,
       slug,
+      isInventory,
+      inventoryProducts
     } = product;
 
     const createdProduct = await ProductModel.create({
@@ -58,6 +60,8 @@ export class ProductsRepo {
       gstPercentage,
       deliveryTime,
       slug,
+      isInventory,
+      inventoryProducts
     });
 
     return createdProduct;

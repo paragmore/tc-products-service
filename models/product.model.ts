@@ -11,6 +11,14 @@ const variantSchema = new Schema({
   },
 });
 
+const inventoryProductSchema = new Schema({
+  productId: { type: [Schema.Types.ObjectId], ref: "Product", required: true },
+  amountConsumed: {
+    type: Number,
+    required: true,
+  },
+});
+
 const unitSchema = new Schema({
   quantity: {
     type: Number,
@@ -92,6 +100,10 @@ const productSchema = new Schema({
   deliveryTime: {
     type: String,
   },
+  isInventory: {
+    type: Boolean,
+  },
+  inventoryProducts: [inventoryProductSchema],
 });
 
 export const ProductModel = mongoose.model("Product", productSchema);
