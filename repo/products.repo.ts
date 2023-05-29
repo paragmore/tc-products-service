@@ -1,11 +1,14 @@
 import { injectable } from "inversify";
 import {
+  CreateCategoryRequestI,
   CreateProductRequestI,
   ProductsFilterByI,
   SortI,
 } from "../types/types";
 import { ProductModel } from "../models/product.model";
-import { SortOrder, Types } from "mongoose";
+import { MongooseError, SortOrder, Types } from "mongoose";
+import { CategoryModel } from "../models/category.model";
+import { ApiError } from "../utils/ApiHelper";
 
 @injectable()
 export class ProductsRepo {
@@ -58,6 +61,48 @@ export class ProductsRepo {
     });
 
     return createdProduct;
+  }
+
+  async createCategory(category: CreateCategoryRequestI) {
+    const { storeId, name, description, slug } = category;
+
+    const createdCategory = await CategoryModel.create({
+      storeId,
+      name,
+      description,
+      slug,
+    });
+
+    return createdCategory;
+  }
+
+  async getStoreProductById(storeId: string, productId: string) {
+    try {
+      const product = await ProductModel.findOne({ storeId, _id: productId });
+      return product;
+    } catch (error) {
+      const mongooseError = error as MongooseError
+      console.log(mongooseError.name)
+      if(mongooseError.name === "CastError"){
+        return new ApiError("Please pass valid product id", 400);
+      }
+      return new ApiError(mongooseError.message, 500);
+    }
+  }
+
+
+  async getStoreCategoryById(storeId: string, categoryId: string) {
+    try {
+      const category = await CategoryModel.findOne({ storeId, _id: categoryId });
+      return category;
+    } catch (error) {
+      const mongooseError = error as MongooseError
+      console.log(mongooseError.name)
+      if(mongooseError.name === "CastError"){
+        return new ApiError("Please pass valid category id", 400);
+      }
+      return new ApiError(mongooseError.message, 500);
+    }
   }
 
   async getAllStoreProducts(

@@ -6,7 +6,12 @@ import {
   ApiHelperHandler,
   IReply,
 } from "../utils/ApiHelper";
-import { CreateProductRequestI, GetProductsQueryParamsI } from "../types/types";
+import {
+  CreateCategoryRequestI,
+  CreateProductRequestI,
+  GetProductsQueryParamsI,
+} from "../types/types";
+import { isValidObjectId } from "mongoose";
 
 @injectable()
 export class ProductsController {
@@ -28,6 +33,15 @@ export class ProductsController {
         return ApiHelper.missingParameters(reply);
       }
 
+      const isValidStoreId = isValidObjectId(body.storeId);
+      if (!isValidStoreId) {
+        return ApiHelper.callFailed(reply, "Please pass valid storeId", 400);
+      }
+
+      const isValidCategory = isValidObjectId(body.category);
+      if (!isValidCategory) {
+        return ApiHelper.callFailed(reply, "Please pass valid categoryId", 400);
+      }
       try {
         const response = await this.productsService.createProduct(body);
         return ApiHelper.success(reply, response);
@@ -37,23 +51,18 @@ export class ProductsController {
       }
     };
 
-  createCategory: ApiHelperHandler<CreateProductRequestI, {}, {}, {}, IReply> =
+  createCategory: ApiHelperHandler<CreateCategoryRequestI, {}, {}, {}, IReply> =
     async (request, reply) => {
       const { body } = request;
-      if (
-        !body ||
-        !body.storeId ||
-        !body.name ||
-        !body.sellsPrice ||
-        !body.category ||
-        !body.quantity ||
-        !body.unit
-      ) {
+      if (!body || !body.storeId || !body.name || !body.description) {
         return ApiHelper.missingParameters(reply);
       }
-
+      const isValidStoreId = isValidObjectId(body.storeId);
+      if (!isValidStoreId) {
+        return ApiHelper.callFailed(reply, "Please pass valid storeId", 400);
+      }
       try {
-        const response = await this.productsService.createProduct(body);
+        const response = await this.productsService.createCategory(body);
         return ApiHelper.success(reply, response);
       } catch (error) {
         //@ts-ignore
@@ -125,5 +134,81 @@ export class ProductsController {
       },
     };
     ApiHelper.success(reply, response);
+  };
+
+  getStoreCategoryById: ApiHelperHandler<
+    {},
+    {},
+    {},
+    { storeId: string; categoryId: string },
+    IReply
+  > = async (request, reply) => {
+    const { params } = request;
+    const { categoryId, storeId } = params;
+    const isValidStoreId = isValidObjectId(storeId);
+    if (!isValidStoreId) {
+      return ApiHelper.callFailed(reply, "Please pass valid storeId", 400);
+    }
+
+    const isValidCategoryId = isValidObjectId(categoryId);
+    if (!isValidCategoryId) {
+      return ApiHelper.callFailed(reply, "Please pass valid categoryId", 400);
+    }
+    const categoryResponse = await this.productsService.getStoreCategoryById(
+      storeId,
+      categoryId
+    );
+    if (!categoryResponse) {
+      return ApiHelper.success(
+        reply,
+        "Category with the given id not found in the store"
+      );
+    }
+    if (categoryResponse instanceof ApiError) {
+      return ApiHelper.callFailed(
+        reply,
+        categoryResponse.message,
+        categoryResponse.code
+      );
+    }
+    ApiHelper.success(reply, categoryResponse);
+  };
+
+  getStoreProductById: ApiHelperHandler<
+    {},
+    {},
+    {},
+    { storeId: string; productId: string },
+    IReply
+  > = async (request, reply) => {
+    const { params } = request;
+    const { productId, storeId } = params;
+    const isValidStoreId = isValidObjectId(storeId);
+    if (!isValidStoreId) {
+      return ApiHelper.callFailed(reply, "Please pass valid storeId", 400);
+    }
+
+    const isValidProductId = isValidObjectId(productId);
+    if (!isValidProductId) {
+      return ApiHelper.callFailed(reply, "Please pass valid productId", 400);
+    }
+    const productsResponse = await this.productsService.getStoreProductById(
+      storeId,
+      productId
+    );
+    if (!productsResponse) {
+      return ApiHelper.success(
+        reply,
+        "Product with the given id not found in the store"
+      );
+    }
+    if (productsResponse instanceof ApiError) {
+      return ApiHelper.callFailed(
+        reply,
+        productsResponse.message,
+        productsResponse.code
+      );
+    }
+    ApiHelper.success(reply, productsResponse);
   };
 }

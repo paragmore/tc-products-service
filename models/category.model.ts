@@ -3,6 +3,7 @@ const categorySchema = new Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
   description: {
     type: String,
@@ -12,6 +13,11 @@ const categorySchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Store",
     required: true,
+  },
+  slug: {
+    type: String,
+    required: true,
+    unique: true,
   },
 });
 

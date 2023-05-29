@@ -57,7 +57,8 @@ const productSchema = new Schema({
     type: Number,
   },
   category: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: "Category",
     required: true,
   },
   variants: [variantSchema], // Array of variants

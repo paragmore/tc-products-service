@@ -3,7 +3,11 @@ import { FastifyInstance } from "fastify";
 import { ProductsController } from "../controllers/products.controller";
 import container from "../inversify.config";
 import { ApiHelper } from "../utils/ApiHelper";
-import { CreateProductRequestI, GetProductsQueryParamsI } from "../types/types";
+import {
+  CreateCategoryRequestI,
+  CreateProductRequestI,
+  GetProductsQueryParamsI,
+} from "../types/types";
 
 export default async (app: FastifyInstance) => {
   const productsController =
@@ -21,9 +25,27 @@ export default async (app: FastifyInstance) => {
     productsController.createProduct.bind(productsController)
   );
 
+  ApiHelper.post<CreateCategoryRequestI, {}, {}, {}>(
+    app,
+    "/category/create",
+    productsController.createCategory.bind(productsController)
+  );
+
   ApiHelper.get<GetProductsQueryParamsI, { storeId: string }, {}>(
     app,
     "/:storeId",
     productsController.getAllStoreProducts.bind(productsController)
+  );
+
+  ApiHelper.get<{}, { storeId: string; productId: string }, {}>(
+    app,
+    "/:storeId/:productId",
+    productsController.getStoreProductById.bind(productsController)
+  );
+
+  ApiHelper.get<{}, { storeId: string; categoryId: string }, {}>(
+    app,
+    "/category/:storeId/:categoryId",
+    productsController.getStoreCategoryById.bind(productsController)
   );
 };

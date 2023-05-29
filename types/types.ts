@@ -56,6 +56,7 @@ export interface CategoryI {
   name: string;
   description: string;
   storeId: Types.ObjectId;
+  slug?:string
 }
 
 export interface CreateCategoryRequestI extends CategoryI {}

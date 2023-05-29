@@ -1,6 +1,7 @@
 import { inject, injectable } from "inversify";
 import { ProductsRepo } from "../repo/products.repo";
 import {
+  CreateCategoryRequestI,
   CreateProductRequestI,
   ProductsFilterByI,
   SortI,
@@ -25,6 +26,39 @@ export class ProductsService {
       slug = `${slug}-${new Date().getTime()}`;
     }
     return await this.productsRepo.createProduct({ ...product, slug });
+  }
+
+  async createCategory(category: CreateCategoryRequestI) {
+    const { name } = category;
+    //convert the name to a unique slug
+    let slug = slugify(name, { lower: true });
+    return await this.productsRepo.createCategory({ ...category, slug });
+  }
+
+  async getStoreProductById(storeId: string, productId: string) {
+    try {
+      const response = await this.productsRepo.getStoreProductById(
+        storeId,
+        productId
+      );
+      return response;
+    } catch (error) {
+      console.log("getAllStoreProducts service", error);
+      return new ApiError("Something went wrong, Please try again", 500);
+    }
+  }
+
+  async getStoreCategoryById(storeId: string, categoryId: string) {
+    try {
+      const response = await this.productsRepo.getStoreCategoryById(
+        storeId,
+        categoryId
+      );
+      return response;
+    } catch (error) {
+      console.log("getStoreCategoryById service", error);
+      return new ApiError("Something went wrong, Please try again", 500);
+    }
   }
 
   async getAllStoreProducts(
