@@ -37,6 +37,30 @@ export class ProductsController {
       }
     };
 
+  createCategory: ApiHelperHandler<CreateProductRequestI, {}, {}, {}, IReply> =
+    async (request, reply) => {
+      const { body } = request;
+      if (
+        !body ||
+        !body.storeId ||
+        !body.name ||
+        !body.sellsPrice ||
+        !body.category ||
+        !body.quantity ||
+        !body.unit
+      ) {
+        return ApiHelper.missingParameters(reply);
+      }
+
+      try {
+        const response = await this.productsService.createProduct(body);
+        return ApiHelper.success(reply, response);
+      } catch (error) {
+        //@ts-ignore
+        return ApiHelper.callFailed(reply, error.message, 500);
+      }
+    };
+
   getAllStoreProducts: ApiHelperHandler<
     {},
     GetProductsQueryParamsI,
@@ -49,14 +73,37 @@ export class ProductsController {
     const page = (query.page && parseInt(query.page)) || 1;
     const nextPage = page + 1;
     const previousPage = page - 1;
-    const sortingPattern = query.sortingPattern || "asc";
-    const { sC } = query;
+    const {
+      sortBy,
+      sortOrder,
+      category,
+      maxPurchasePrice,
+      maxQuantity,
+      maxSellsPrice,
+      minPurchasePrice,
+      minQuantity,
+      minSellsPrice,
+    } = query;
+
+    const filterCategories = category ? category.split(",") : [];
+    const filterBy = {
+      maxPurchasePrice,
+      maxQuantity,
+      maxSellsPrice,
+      minPurchasePrice,
+      minQuantity,
+      minSellsPrice,
+      category: filterCategories,
+    };
     const productsResponse = await this.productsService.getAllStoreProducts(
       params.storeId,
       page,
       pageSize,
-      sortingPattern,
-      sC
+      {
+        sortBy,
+        sortOrder,
+      },
+      filterBy
     );
     if (productsResponse instanceof ApiError) {
       ApiHelper.callFailed(
@@ -73,8 +120,8 @@ export class ProductsController {
         page,
         nextPage,
         previousPage,
-        totalPages: Math.ceil(productsResponse.size / pageSize),
-        totalResults: productsResponse.size,
+        totalPages: Math.ceil(productsResponse.totalCount / pageSize),
+        totalResults: productsResponse.totalCount,
       },
     };
     ApiHelper.success(reply, response);

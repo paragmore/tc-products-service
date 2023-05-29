@@ -1,4 +1,4 @@
-import { Document, Schema, Types } from "mongoose";
+import { Document, Schema, SortOrder, Types } from "mongoose";
 
 interface VariantPropertiesI {
   [key: string]: string;
@@ -52,12 +52,43 @@ export {
   ProductDocument,
 };
 
+export interface CategoryI {
+  name: string;
+  description: string;
+  storeId: Types.ObjectId;
+}
+
+export interface CreateCategoryRequestI extends CategoryI {}
+
 export interface CreateProductRequestI extends ProductI {}
 
-export interface GetProductsQueryParamsI {
-    pageSize?: string;
-    page?: string;
-    sortingPattern?: string;
-    sC?: string;
-  }
-  
+export interface ProductsFilterByI {
+  category?: string[];
+  minSellsPrice?: number;
+  maxSellsPrice?: number;
+  minPurchasePrice?: number;
+  maxPurchasePrice?: number;
+  minQuantity?: number;
+  maxQuantity?: number;
+}
+
+export interface ProductsFilterByQueryI {
+  category?: string;
+  minSellsPrice?: number;
+  maxSellsPrice?: number;
+  minPurchasePrice?: number;
+  maxPurchasePrice?: number;
+  minQuantity?: number;
+  maxQuantity?: number;
+}
+
+export interface SortI {
+  sortBy: string | undefined;
+  sortOrder: SortOrder | undefined;
+}
+export interface GetProductsQueryParamsI extends ProductsFilterByQueryI {
+  pageSize?: string;
+  page?: string;
+  sortBy?: string;
+  sortOrder?: SortOrder;
+}

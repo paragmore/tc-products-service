@@ -1,6 +1,10 @@
 import { inject, injectable } from "inversify";
 import { ProductsRepo } from "../repo/products.repo";
-import { CreateProductRequestI } from "../types/types";
+import {
+  CreateProductRequestI,
+  ProductsFilterByI,
+  SortI,
+} from "../types/types";
 import slugify from "slugify";
 import { ApiError } from "../utils/ApiHelper";
 
@@ -27,18 +31,18 @@ export class ProductsService {
     storeId: string,
     page: number,
     pageSize: number,
-    sortingPattern: string,
-    sC?: string
+    sort?: SortI,
+    filterBy?: ProductsFilterByI
   ) {
     try {
-      const products = await this.productsRepo.getAllStoreProducts(
+      const response = await this.productsRepo.getAllStoreProducts(
         storeId,
         page,
         pageSize,
-        sortingPattern,
-        sC
+        sort,
+        filterBy
       );
-      return { products };
+      return response;
     } catch (error) {
       console.log("getAllStoreProducts service", error);
       return new ApiError("Something went wrong, Please try again", 500);
