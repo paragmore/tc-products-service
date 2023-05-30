@@ -54,7 +54,7 @@ export class ProductsController {
   createCategory: ApiHelperHandler<CreateCategoryRequestI, {}, {}, {}, IReply> =
     async (request, reply) => {
       const { body } = request;
-      if (!body || !body.storeId || !body.name || !body.description) {
+      if (!body || !body.storeId || !body.name) {
         return ApiHelper.missingParameters(reply);
       }
       const isValidStoreId = isValidObjectId(body.storeId);
@@ -63,6 +63,9 @@ export class ProductsController {
       }
       try {
         const response = await this.productsService.createCategory(body);
+        if (response instanceof ApiError) {
+          return ApiHelper.callFailed(reply, response.message, response.code);
+        }
         return ApiHelper.success(reply, response);
       } catch (error) {
         //@ts-ignore

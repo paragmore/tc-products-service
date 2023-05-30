@@ -38,7 +38,7 @@ export class ProductsRepo {
       deliveryTime,
       slug,
       isInventory,
-      inventoryProducts
+      inventoryProducts,
     } = product;
 
     const createdProduct = await ProductModel.create({
@@ -61,7 +61,7 @@ export class ProductsRepo {
       deliveryTime,
       slug,
       isInventory,
-      inventoryProducts
+      inventoryProducts,
     });
 
     return createdProduct;
@@ -69,15 +69,25 @@ export class ProductsRepo {
 
   async createCategory(category: CreateCategoryRequestI) {
     const { storeId, name, description, slug } = category;
+    try {
+      const createdCategory = await CategoryModel.create({
+        storeId,
+        name,
+        description,
+        slug,
+      });
 
-    const createdCategory = await CategoryModel.create({
-      storeId,
-      name,
-      description,
-      slug,
-    });
+      return createdCategory;
+    } catch (error) {
+      const mongooseError = error as MongooseError;
+      console.log(mongooseError);
+      console.log(mongooseError.name);
 
-    return createdCategory;
+      if (mongooseError.message.includes("duplicate key")) {
+        return new ApiError("Category with same name already exists", 400);
+      }
+      return new ApiError(mongooseError.message, 500);
+    }
   }
 
   async getStoreProductById(storeId: string, productId: string) {
@@ -85,24 +95,26 @@ export class ProductsRepo {
       const product = await ProductModel.findOne({ storeId, _id: productId });
       return product;
     } catch (error) {
-      const mongooseError = error as MongooseError
-      console.log(mongooseError.name)
-      if(mongooseError.name === "CastError"){
+      const mongooseError = error as MongooseError;
+      console.log(mongooseError.name);
+      if (mongooseError.name === "CastError") {
         return new ApiError("Please pass valid product id", 400);
       }
       return new ApiError(mongooseError.message, 500);
     }
   }
 
-
   async getStoreCategoryById(storeId: string, categoryId: string) {
     try {
-      const category = await CategoryModel.findOne({ storeId, _id: categoryId });
+      const category = await CategoryModel.findOne({
+        storeId,
+        _id: categoryId,
+      });
       return category;
     } catch (error) {
-      const mongooseError = error as MongooseError
-      console.log(mongooseError.name)
-      if(mongooseError.name === "CastError"){
+      const mongooseError = error as MongooseError;
+      console.log(mongooseError.name);
+      if (mongooseError.name === "CastError") {
         return new ApiError("Please pass valid category id", 400);
       }
       return new ApiError(mongooseError.message, 500);

@@ -26,7 +26,7 @@ interface ProductI {
   description?: string;
   sellsPrice: number;
   purchasePrice?: number;
-  category: string;
+  category: Types.ObjectId[];
   variants: VariantI[];
   heroImage?: string;
   images: string[];
