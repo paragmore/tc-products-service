@@ -82,4 +82,24 @@ export class ProductsService {
       return new ApiError("Something went wrong, Please try again", 500);
     }
   }
+
+  async getAllStoreCategories(
+    storeId: string,
+    page: number,
+    pageSize: number,
+    sort?: SortI
+  ) {
+    try {
+      const response = await this.productsRepo.getAllStoreCategories(
+        storeId,
+        page,
+        pageSize,
+        sort
+      );
+      return response;
+    } catch (error) {
+      console.log("getAllStoreCategories service", error);
+      return new ApiError("Something went wrong, Please try again", 500);
+    }
+  }
 }

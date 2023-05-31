@@ -94,7 +94,13 @@ export interface SortI {
   sortBy: string | undefined;
   sortOrder: SortOrder | undefined;
 }
-export interface GetProductsQueryParamsI extends ProductsFilterByQueryI {
+export interface GetProductsQueryParamsI
+  extends ProductsFilterByQueryI,
+    PaginationQueryParamsI {}
+
+export interface GetCategoriesQueryParamsI extends PaginationQueryParamsI {}
+
+export interface PaginationQueryParamsI {
   pageSize?: string;
   page?: string;
   sortBy?: string;

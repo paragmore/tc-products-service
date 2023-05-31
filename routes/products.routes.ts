@@ -6,6 +6,7 @@ import { ApiHelper } from "../utils/ApiHelper";
 import {
   CreateCategoryRequestI,
   CreateProductRequestI,
+  GetCategoriesQueryParamsI,
   GetProductsQueryParamsI,
 } from "../types/types";
 
@@ -29,6 +30,12 @@ export default async (app: FastifyInstance) => {
     app,
     "/category/create",
     productsController.createCategory.bind(productsController)
+  );
+
+  ApiHelper.get<GetCategoriesQueryParamsI, { storeId: string }, {}>(
+    app,
+    "/category/:storeId",
+    productsController.getAllStoreCategories.bind(productsController)
   );
 
   ApiHelper.get<GetProductsQueryParamsI, { storeId: string }, {}>(

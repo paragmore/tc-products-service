@@ -9,6 +9,7 @@ import {
 import {
   CreateCategoryRequestI,
   CreateProductRequestI,
+  GetCategoriesQueryParamsI,
   GetProductsQueryParamsI,
 } from "../types/types";
 import { isValidObjectId } from "mongoose";
@@ -134,6 +135,51 @@ export class ProductsController {
         previousPage,
         totalPages: Math.ceil(productsResponse.totalCount / pageSize),
         totalResults: productsResponse.totalCount,
+      },
+    };
+    ApiHelper.success(reply, response);
+  };
+
+  getAllStoreCategories: ApiHelperHandler<
+    {},
+    GetCategoriesQueryParamsI,
+    {},
+    { storeId: string },
+    IReply
+  > = async (request, reply) => {
+    const { query, params } = request;
+    const pageSize = (query.pageSize && parseInt(query.pageSize)) || 10;
+    const page = (query.page && parseInt(query.page)) || 1;
+    const nextPage = page + 1;
+    const previousPage = page - 1;
+    const { sortBy, sortOrder } = query;
+
+    const categoriesResponse = await this.productsService.getAllStoreCategories(
+      params.storeId,
+      page,
+      pageSize,
+      {
+        sortBy,
+        sortOrder,
+      }
+    );
+    if (categoriesResponse instanceof ApiError) {
+      ApiHelper.callFailed(
+        reply,
+        categoriesResponse.message,
+        categoriesResponse.code
+      );
+      return;
+    }
+    const response = {
+      categories: categoriesResponse.categories,
+      pagination: {
+        pageSize,
+        page,
+        nextPage,
+        previousPage,
+        totalPages: Math.ceil(categoriesResponse.totalCount / pageSize),
+        totalResults: categoriesResponse.totalCount,
       },
     };
     ApiHelper.success(reply, response);

@@ -153,4 +153,31 @@ export class ProductsRepo {
 
     return { products, totalCount };
   }
+
+  async getAllStoreCategories(
+    storeId: string,
+    page: number,
+    pageSize: number,
+    sort?: SortI
+  ) {
+    let sortBy: { [key: string]: SortOrder };
+    if (!sort?.sortBy) {
+      sortBy = { _id: -1 };
+    } else {
+      sortBy = { [sort.sortBy]: sort.sortOrder ? sort.sortOrder : "asc" };
+    }
+    console.log(sortBy);
+    const skipCount = (page - 1) * pageSize;
+    let query = CategoryModel.find().where({ storeId });
+    let countQuery = CategoryModel.find().where({ storeId });
+    const categories = await query
+      .sort(sortBy)
+      .skip(skipCount)
+      .limit(pageSize)
+      .exec();
+
+    const totalCount = await countQuery.countDocuments().exec();
+
+    return { categories, totalCount };
+  }
 }
