@@ -5,6 +5,7 @@ import {
   CreateProductRequestI,
   ProductsFilterByI,
   SortI,
+  UnitI,
 } from "../types/types";
 import slugify from "slugify";
 import { ApiError } from "../utils/ApiHelper";
@@ -25,7 +26,19 @@ export class ProductsService {
       //append timestamp to make it unique
       slug = `${slug}-${new Date().getTime()}`;
     }
-    return await this.productsRepo.createProduct({ ...product, slug });
+    let purchaseUnit: UnitI | undefined =
+      product.purchaseUnitName && product.purchaseUnitConversion
+        ? {
+            name: product.purchaseUnitName,
+            conversion: product.purchaseUnitConversion,
+          }
+        : undefined;
+    return await this.productsRepo.createProduct({
+      ...product,
+      slug,
+      unit: { name: product.unit },
+      purchaseUnit,
+    });
   }
 
   async createCategory(category: CreateCategoryRequestI) {

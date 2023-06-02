@@ -7,17 +7,25 @@ interface VariantPropertiesI {
 interface VariantI {
   properties: VariantPropertiesI;
   stockQuantity: number;
+  sellsPrice?: number;
+  skuId?: number;
+  discounts?: DiscountI[];
+  imageUrls?: string[];
 }
 
 interface UnitI {
-  quantity: number;
+  quantity?: number;
   name: string;
   conversion?: number;
 }
 
 interface DiscountI {
   volumeThreshold: number;
-  discountPercentage: number;
+  type: string;
+  value: number;
+  name?: string;
+  code?: string;
+  validity?: string;
 }
 
 interface ProductI {
@@ -26,13 +34,13 @@ interface ProductI {
   description?: string;
   sellsPrice: number;
   purchasePrice?: number;
-  category: Types.ObjectId[];
-  variants: VariantI[];
+  category?: Types.ObjectId[];
+  variants?: VariantI[];
   heroImage?: string;
-  images: string[];
+  images?: string[];
   slug: string;
   quantity: number;
-  discounts: DiscountI[];
+  discounts?: DiscountI[];
   hsnCode?: string;
   taxIncluded?: boolean;
   unit: UnitI;
@@ -68,7 +76,28 @@ export interface CategoryI {
 
 export interface CreateCategoryRequestI extends CategoryI {}
 
-export interface CreateProductRequestI extends ProductI {}
+export interface CreateProductRequestI {
+  storeId: Types.ObjectId;
+  name: string;
+  description?: string;
+  sellsPrice: number;
+  purchasePrice?: number;
+  category: Types.ObjectId[];
+  variants?: VariantI[];
+  heroImage?: string;
+  images?: string[];
+  quantity: number;
+  discounts?: DiscountI[];
+  hsnCode?: string;
+  taxIncluded?: boolean;
+  unit: string;
+  purchaseUnitName?: string;
+  purchaseUnitConversion?: number;
+  gstPercentage?: number;
+  deliveryTime?: string;
+  isInventory?: boolean;
+  inventoryProducts?: InventoryProductI[];
+}
 
 export interface ProductsFilterByI {
   category?: string[];

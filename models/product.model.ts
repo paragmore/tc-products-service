@@ -1,4 +1,15 @@
 import mongoose, { Schema } from "mongoose";
+const discountSchema = new Schema({
+  volumeThreshold: {
+    type: Number,
+    required: true,
+  },
+  discountPercentage: {
+    type: Number,
+    required: true,
+  },
+});
+
 const variantSchema = new Schema({
   properties: {
     type: Map,
@@ -9,6 +20,17 @@ const variantSchema = new Schema({
     type: Number,
     required: true,
   },
+  sellsPrice: {
+    type: Number,
+  },
+  skuId: {
+    type: Number,
+  },
+  imageUrls: {
+    type: [String],
+    default: [],
+  },
+  discounts: [discountSchema],
 });
 
 const inventoryProductSchema = new Schema({
@@ -22,7 +44,6 @@ const inventoryProductSchema = new Schema({
 const unitSchema = new Schema({
   quantity: {
     type: Number,
-    required: true,
   },
   name: {
     type: String,
@@ -30,17 +51,6 @@ const unitSchema = new Schema({
   },
   conversion: {
     type: Number,
-  },
-});
-
-const discountSchema = new Schema({
-  volumeThreshold: {
-    type: Number,
-    required: true,
-  },
-  discountPercentage: {
-    type: Number,
-    required: true,
   },
 });
 

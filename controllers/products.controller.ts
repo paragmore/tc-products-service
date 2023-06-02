@@ -39,10 +39,16 @@ export class ProductsController {
         return ApiHelper.callFailed(reply, "Please pass valid storeId", 400);
       }
 
-      const isValidCategory = isValidObjectId(body.category);
-      if (!isValidCategory) {
-        return ApiHelper.callFailed(reply, "Please pass valid categoryId", 400);
-      }
+      body.category.map((cat) => {
+        const isValidCategory = isValidObjectId(cat);
+        if (!isValidCategory) {
+          return ApiHelper.callFailed(
+            reply,
+            `Please pass valid categoryId: ${cat}`,
+            400
+          );
+        }
+      });
       try {
         const response = await this.productsService.createProduct(body);
         return ApiHelper.success(reply, response);

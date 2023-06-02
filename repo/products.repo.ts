@@ -2,6 +2,7 @@ import { injectable } from "inversify";
 import {
   CreateCategoryRequestI,
   CreateProductRequestI,
+  ProductI,
   ProductsFilterByI,
   SortI,
 } from "../types/types";
@@ -17,7 +18,7 @@ export class ProductsRepo {
     const product = await ProductModel.findOne({ storeId, slug });
     return product;
   }
-  async createProduct(product: CreateProductRequestI) {
+  async createProduct(product: ProductI) {
     const {
       storeId,
       name,
