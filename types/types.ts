@@ -48,6 +48,7 @@ interface ProductI {
   deliveryTime?: string;
   isInventory?: boolean;
   inventoryProducts?: InventoryProductI[];
+  lowStock?: number;
 }
 
 export interface InventoryProductI {
@@ -96,6 +97,7 @@ export interface UpdateProductRequestI {
   deliveryTime?: string;
   isInventory?: boolean;
   inventoryProducts?: InventoryProductI[];
+  lowStock?: number;
 }
 export interface CreateProductRequestI {
   storeId: Types.ObjectId;
@@ -118,6 +120,7 @@ export interface CreateProductRequestI {
   deliveryTime?: string;
   isInventory?: boolean;
   inventoryProducts?: InventoryProductI[];
+  lowStock?: number;
 }
 
 export interface ProductsFilterByI {

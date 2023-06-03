@@ -110,6 +110,9 @@ const productSchema = new Schema({
     type: Number,
     required: true,
   },
+  lowStock: {
+    type: Number,
+  },
   discounts: [discountSchema], // Array of discounts
   hsnCode: {
     type: String,

@@ -40,6 +40,7 @@ export class ProductsRepo {
       slug,
       isInventory,
       inventoryProducts,
+      lowStock,
     } = product;
 
     const createdProduct = await ProductModel.create({
@@ -63,6 +64,7 @@ export class ProductsRepo {
       slug,
       isInventory,
       inventoryProducts,
+      lowStock,
     });
 
     return createdProduct;
@@ -88,9 +90,10 @@ export class ProductsRepo {
       deliveryTime,
       isInventory,
       inventoryProducts,
+      lowStock,
     } = product;
 
-    const createdProduct = await ProductModel.findByIdAndUpdate(id, {
+    const updatedProduct = await ProductModel.findByIdAndUpdate(id, {
       name,
       description,
       sellsPrice,
@@ -109,9 +112,10 @@ export class ProductsRepo {
       deliveryTime,
       isInventory,
       inventoryProducts,
+      lowStock,
     });
 
-    return createdProduct;
+    return updatedProduct;
   }
 
   async createCategory(category: CreateCategoryRequestI) {
