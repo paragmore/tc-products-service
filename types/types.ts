@@ -75,6 +75,28 @@ export interface CategoryI {
 
 export interface CreateCategoryRequestI extends CategoryI {}
 
+export interface UpdateProductRequestI {
+  productId: Types.ObjectId;
+  name: string;
+  description?: string;
+  sellsPrice: number;
+  purchasePrice?: number;
+  category: Types.ObjectId[];
+  variants?: VariantI[];
+  heroImage?: string;
+  images?: string[];
+  quantity: number;
+  discounts?: DiscountI[];
+  hsnCode?: string;
+  taxIncluded?: boolean;
+  unit: string;
+  purchaseUnitName?: string;
+  purchaseUnitConversion?: number;
+  gstPercentage?: number;
+  deliveryTime?: string;
+  isInventory?: boolean;
+  inventoryProducts?: InventoryProductI[];
+}
 export interface CreateProductRequestI {
   storeId: Types.ObjectId;
   name: string;

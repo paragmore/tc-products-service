@@ -11,6 +11,7 @@ import {
   CreateProductRequestI,
   GetCategoriesQueryParamsI,
   GetProductsQueryParamsI,
+  UpdateProductRequestI,
 } from "../types/types";
 import { isValidObjectId } from "mongoose";
 
@@ -51,6 +52,37 @@ export class ProductsController {
       });
       try {
         const response = await this.productsService.createProduct(body);
+        return ApiHelper.success(reply, response);
+      } catch (error) {
+        //@ts-ignore
+        return ApiHelper.callFailed(reply, error.message, 500);
+      }
+    };
+
+  updateProduct: ApiHelperHandler<UpdateProductRequestI, {}, {}, {}, IReply> =
+    async (request, reply) => {
+      const { body } = request;
+      if (!body || !body.productId) {
+        return ApiHelper.missingParameters(reply);
+      }
+
+      const isValidProductId = isValidObjectId(body.productId);
+      if (!isValidProductId) {
+        return ApiHelper.callFailed(reply, "Please pass valid ProductId", 400);
+      }
+
+      body.category.map((cat) => {
+        const isValidCategory = isValidObjectId(cat);
+        if (!isValidCategory) {
+          return ApiHelper.callFailed(
+            reply,
+            `Please pass valid categoryId: ${cat}`,
+            400
+          );
+        }
+      });
+      try {
+        const response = await this.productsService.updateProduct(body);
         return ApiHelper.success(reply, response);
       } catch (error) {
         //@ts-ignore

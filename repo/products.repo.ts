@@ -68,6 +68,52 @@ export class ProductsRepo {
     return createdProduct;
   }
 
+  async updateProduct(id: Types.ObjectId, product: ProductI) {
+    const {
+      name,
+      description,
+      sellsPrice,
+      purchasePrice,
+      category,
+      variants,
+      heroImage,
+      images,
+      quantity,
+      discounts,
+      hsnCode,
+      taxIncluded,
+      unit,
+      purchaseUnit,
+      gstPercentage,
+      deliveryTime,
+      isInventory,
+      inventoryProducts,
+    } = product;
+
+    const createdProduct = await ProductModel.findByIdAndUpdate(id, {
+      name,
+      description,
+      sellsPrice,
+      purchasePrice,
+      category,
+      variants,
+      heroImage,
+      images,
+      quantity,
+      discounts,
+      hsnCode,
+      taxIncluded,
+      unit,
+      purchaseUnit,
+      gstPercentage,
+      deliveryTime,
+      isInventory,
+      inventoryProducts,
+    });
+
+    return createdProduct;
+  }
+
   async createCategory(category: CreateCategoryRequestI) {
     const { storeId, name, description, slug } = category;
     try {

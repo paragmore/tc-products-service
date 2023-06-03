@@ -6,9 +6,11 @@ import {
   ProductsFilterByI,
   SortI,
   UnitI,
+  UpdateProductRequestI,
 } from "../types/types";
 import slugify from "slugify";
 import { ApiError } from "../utils/ApiHelper";
+import { Types } from "mongoose";
 
 @injectable()
 export class ProductsService {
@@ -38,6 +40,23 @@ export class ProductsService {
       slug,
       unit: { name: product.unit },
       purchaseUnit,
+    });
+  }
+
+  async updateProduct(product: UpdateProductRequestI) {
+    let purchaseUnit: UnitI | undefined =
+      product.purchaseUnitName && product.purchaseUnitConversion
+        ? {
+            name: product.purchaseUnitName,
+            conversion: product.purchaseUnitConversion,
+          }
+        : undefined;
+    return await this.productsRepo.updateProduct(product.productId, {
+      ...product,
+      unit: { name: product.unit },
+      purchaseUnit,
+      storeId: new Types.ObjectId(),
+      slug: "",
     });
   }
 

@@ -8,6 +8,7 @@ import {
   CreateProductRequestI,
   GetCategoriesQueryParamsI,
   GetProductsQueryParamsI,
+  UpdateProductRequestI,
 } from "../types/types";
 
 export default async (app: FastifyInstance) => {
@@ -19,6 +20,12 @@ export default async (app: FastifyInstance) => {
   //   "/",
   //   productsController.createProduct.bind(productsController)
   // );
+
+  ApiHelper.put<UpdateProductRequestI, {}, {}, {}>(
+    app,
+    "/update",
+    productsController.updateProduct.bind(productsController)
+  );
 
   ApiHelper.post<CreateProductRequestI, {}, {}, {}>(
     app,

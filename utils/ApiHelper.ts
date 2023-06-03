@@ -186,7 +186,7 @@ export class ApiHelper {
       FastifyTypeProviderDefault,
       IReply
     >,
-    payload: {} = {}
+    payload: {} | null = {}
   ) {
     reply.send({
       status: 200,
