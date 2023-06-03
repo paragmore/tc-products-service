@@ -18,14 +18,13 @@ interface UnitI {
   name: string;
   conversion?: number;
 }
-
 interface DiscountI {
-  volumeThreshold: number;
-  type: string;
+  type: "percentage" | "amount";
+  code: string;
+  minType: "orderQuantity" | "orderValue";
   value: number;
-  name?: string;
-  code?: string;
-  validity?: string;
+  minimum?: number;
+  maxDiscount?: number;
 }
 
 interface ProductI {

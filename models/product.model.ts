@@ -1,10 +1,25 @@
 import mongoose, { Schema } from "mongoose";
 const discountSchema = new Schema({
-  volumeThreshold: {
+  type: {
+    type: String,
+    required: true,
+  },
+  code: {
+    type: String,
+    required: true,
+  },
+  minType: {
+    type: String,
+    required: true,
+  },
+  minimum: {
+    type: Number,
+  },
+  value: {
     type: Number,
     required: true,
   },
-  discountPercentage: {
+  maxDiscount: {
     type: Number,
     required: true,
   },
