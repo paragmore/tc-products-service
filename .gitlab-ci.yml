@@ -29,7 +29,7 @@ deploy_production:
         - mv docker-compose.yml products-api/docker-compose.yml
         - touch key.pem
         - export keyfile=./key.pem
-        - printf "%s" "$AWS_PEM" > "$keyfile"
+        - print "%s" "$AWS_PEM" > "$keyfile"
         - chmod 400 key.pem
         - sshpass scp -i "key.pem" -o stricthostkeychecking=no -r products-api ubuntu@${SERVER_IP}:~/
         - sshpass ssh -i "key.pem" -o StrictHostKeyChecking=no ubuntu@${SERVER_IP} "cd ~/products-api;sudo docker products -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY};sudo docker-compose down;sudo docker image rm ${CI_REGISTRY_IMAGE}:production;sudo docker-compose up -d;"
