@@ -143,7 +143,10 @@ export class ProductsRepo {
 
   async getStoreProductById(storeId: string, productId: string) {
     try {
-      const product = await ProductModel.findOne({ storeId, _id: productId });
+      const product = await ProductModel.findOne({
+        storeId,
+        _id: productId,
+      }).populate("category");
       return product;
     } catch (error) {
       const mongooseError = error as MongooseError;
@@ -198,6 +201,7 @@ export class ProductsRepo {
       .sort(sortBy)
       .skip(skipCount)
       .limit(pageSize)
+      .populate("category")
       .exec();
 
     const totalCount = await countQuery.countDocuments().exec();
