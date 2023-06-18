@@ -29,7 +29,7 @@ export class ProductsController {
         !body.name ||
         !body.sellsPrice ||
         !body.category ||
-        !body.quantity ||
+        !(body.quantity || body.isService) ||
         !body.unit
       ) {
         return ApiHelper.missingParameters(reply);
@@ -134,6 +134,7 @@ export class ProductsController {
       minPurchasePrice,
       minQuantity,
       minSellsPrice,
+      itemType,
     } = query;
 
     const filterCategories = category ? category.split(",") : [];
@@ -145,6 +146,7 @@ export class ProductsController {
       minQuantity,
       minSellsPrice,
       category: filterCategories,
+      itemType,
     };
     const productsResponse = await this.productsService.getAllStoreProducts(
       params.storeId,

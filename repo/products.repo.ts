@@ -2,6 +2,7 @@ import { injectable } from "inversify";
 import {
   CreateCategoryRequestI,
   CreateProductRequestI,
+  ItemTypeEnum,
   ProductI,
   ProductsFilterByI,
   SortI,
@@ -41,6 +42,7 @@ export class ProductsRepo {
       isInventory,
       inventoryProducts,
       lowStock,
+      isService,
     } = product;
 
     const createdProduct = await ProductModel.create({
@@ -65,6 +67,7 @@ export class ProductsRepo {
       isInventory,
       inventoryProducts,
       lowStock,
+      isService,
     });
 
     return createdProduct;
@@ -195,6 +198,10 @@ export class ProductsRepo {
     if (filterBy?.category && filterBy?.category?.length > 0) {
       query.where({ category: { $in: filterBy?.category } });
       countQuery.where({ category: { $in: filterBy?.category } });
+    }
+    if (filterBy?.itemType && filterBy?.itemType === ItemTypeEnum.SERVICE) {
+      query.where({ isService: true });
+      countQuery.where({ isService: true });
     }
 
     const products = await query

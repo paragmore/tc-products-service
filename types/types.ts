@@ -49,6 +49,7 @@ interface ProductI {
   isInventory?: boolean;
   inventoryProducts?: InventoryProductI[];
   lowStock?: number;
+  isService?: boolean;
 }
 
 export interface InventoryProductI {
@@ -121,6 +122,7 @@ export interface CreateProductRequestI {
   isInventory?: boolean;
   inventoryProducts?: InventoryProductI[];
   lowStock?: number;
+  isService: boolean;
 }
 
 export interface ProductsFilterByI {
@@ -131,6 +133,7 @@ export interface ProductsFilterByI {
   maxPurchasePrice?: number;
   minQuantity?: number;
   maxQuantity?: number;
+  itemType?: ItemTypeEnum;
 }
 
 export interface ProductsFilterByQueryI {
@@ -141,6 +144,12 @@ export interface ProductsFilterByQueryI {
   maxPurchasePrice?: number;
   minQuantity?: number;
   maxQuantity?: number;
+  itemType?: ItemTypeEnum;
+}
+
+export enum ItemTypeEnum {
+  PRODUCT = "Product",
+  SERVICE = "Service",
 }
 
 export interface SortI {

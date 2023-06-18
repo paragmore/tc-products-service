@@ -108,7 +108,9 @@ const productSchema = new Schema({
   },
   quantity: {
     type: Number,
-    required: true,
+    required: function () {
+      return !(this as any).isService;
+    },
   },
   lowStock: {
     type: Number,
@@ -132,6 +134,9 @@ const productSchema = new Schema({
     type: Boolean,
   },
   inventoryProducts: [inventoryProductSchema],
+  isService: {
+    type: Schema.Types.Boolean,
+  },
 });
 
 export const ProductModel = mongoose.model("Product", productSchema);
