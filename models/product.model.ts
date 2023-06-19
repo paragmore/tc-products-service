@@ -137,6 +137,9 @@ const productSchema = new Schema({
   isService: {
     type: Schema.Types.Boolean,
   },
+  isDeleted: {
+    type: Schema.Types.Boolean,
+  },
 });
 
 export const ProductModel = mongoose.model("Product", productSchema);

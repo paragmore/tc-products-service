@@ -50,6 +50,7 @@ interface ProductI {
   inventoryProducts?: InventoryProductI[];
   lowStock?: number;
   isService?: boolean;
+  isDeleted?: boolean;
 }
 
 export interface InventoryProductI {

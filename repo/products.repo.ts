@@ -193,7 +193,10 @@ export class ProductsRepo {
     }
     console.log(sortBy);
     const skipCount = (page - 1) * pageSize;
-    let query = ProductModel.find().where({ storeId });
+    let query = ProductModel.find().where({
+      storeId,
+      isDeleted: { $ne: true },
+    });
     let countQuery = ProductModel.find().where({ storeId });
     if (filterBy?.category && filterBy?.category?.length > 0) {
       query.where({ category: { $in: filterBy?.category } });
@@ -202,6 +205,11 @@ export class ProductsRepo {
     if (filterBy?.itemType && filterBy?.itemType === ItemTypeEnum.SERVICE) {
       query.where({ isService: true });
       countQuery.where({ isService: true });
+    }
+
+    if (filterBy?.itemType && filterBy?.itemType === ItemTypeEnum.PRODUCT) {
+      query.where({ isService: { $ne: true } });
+      countQuery.where({ isService: { $ne: true } });
     }
 
     const products = await query
