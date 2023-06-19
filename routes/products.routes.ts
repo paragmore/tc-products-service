@@ -6,6 +6,7 @@ import { ApiHelper } from "../utils/ApiHelper";
 import {
   CreateCategoryRequestI,
   CreateProductRequestI,
+  DeleteProductsRequestI,
   GetCategoriesQueryParamsI,
   GetProductsQueryParamsI,
   UpdateProductRequestI,
@@ -61,5 +62,11 @@ export default async (app: FastifyInstance) => {
     app,
     "/category/:storeId/:categoryId",
     productsController.getStoreCategoryById.bind(productsController)
+  );
+
+  ApiHelper.post<DeleteProductsRequestI, {}, {}, {}>(
+    app,
+    "/delete",
+    productsController.softDeleteProducts.bind(productsController)
   );
 };
