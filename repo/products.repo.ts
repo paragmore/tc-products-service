@@ -250,4 +250,12 @@ export class ProductsRepo {
 
     return { categories, totalCount };
   }
+
+  async softDeleteProducts(storeId: string, productIds: string[]) {
+    const deletedResponse = await ProductModel.updateMany(
+      { storeId, _id: { $in: [...productIds] } },
+      { isDeleted: true }
+    );
+    return deletedResponse;
+  }
 }
