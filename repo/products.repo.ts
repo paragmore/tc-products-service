@@ -197,7 +197,10 @@ export class ProductsRepo {
       storeId,
       isDeleted: { $ne: true },
     });
-    let countQuery = ProductModel.find().where({ storeId });
+    let countQuery = ProductModel.find().where({
+      storeId,
+      isDeleted: { $ne: true },
+    });
     if (filterBy?.category && filterBy?.category?.length > 0) {
       query.where({ category: { $in: filterBy?.category } });
       countQuery.where({ category: { $in: filterBy?.category } });

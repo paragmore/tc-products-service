@@ -329,6 +329,7 @@ export class ProductsController {
           deleteResponse.code
         );
       }
+      return ApiHelper.success(reply, deleteResponse);
     } catch (error) {
       //@ts-ignore
       return ApiHelper.callFailed(reply, error.message, 500);
