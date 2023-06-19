@@ -169,3 +169,8 @@ export interface PaginationQueryParamsI {
   sortBy?: string;
   sortOrder?: SortOrder;
 }
+
+export interface DeleteProductsRequestI {
+  storeId: string;
+  productIds: string[];
+}

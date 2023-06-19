@@ -9,6 +9,7 @@ import {
 import {
   CreateCategoryRequestI,
   CreateProductRequestI,
+  DeleteProductsRequestI,
   GetCategoriesQueryParamsI,
   GetProductsQueryParamsI,
   UpdateProductRequestI,
@@ -299,5 +300,38 @@ export class ProductsController {
       );
     }
     ApiHelper.success(reply, productsResponse);
+  };
+
+  softDeleteProducts: ApiHelperHandler<
+    DeleteProductsRequestI,
+    {},
+    {},
+    {},
+    IReply
+  > = async (request, reply) => {
+    const { body } = request;
+    if (!body || !body.storeId || !body.productIds) {
+      return ApiHelper.missingParameters(reply);
+    }
+    const isValidStoreId = isValidObjectId(body.storeId);
+    if (!isValidStoreId) {
+      return ApiHelper.callFailed(reply, "Please pass valid storeId", 400);
+    }
+    try {
+      const deleteResponse = await this.productsService.softDeleteProducts(
+        body.storeId,
+        body.productIds
+      );
+      if (deleteResponse instanceof ApiError) {
+        return ApiHelper.callFailed(
+          reply,
+          deleteResponse.message,
+          deleteResponse.code
+        );
+      }
+    } catch (error) {
+      //@ts-ignore
+      return ApiHelper.callFailed(reply, error.message, 500);
+    }
   };
 }

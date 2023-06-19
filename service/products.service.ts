@@ -134,4 +134,17 @@ export class ProductsService {
       return new ApiError("Something went wrong, Please try again", 500);
     }
   }
+
+  async softDeleteProducts(storeId: string, productIds: string[]) {
+    try {
+      const response = await this.productsRepo.softDeleteProducts(
+        storeId,
+        productIds
+      );
+      return response;
+    } catch (error) {
+      console.log("softDeleteProducts service", error);
+      return new ApiError("Something went wrong, Please try again", 500);
+    }
+  }
 }
