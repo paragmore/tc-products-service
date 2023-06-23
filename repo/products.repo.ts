@@ -2,6 +2,7 @@ import { injectable } from "inversify";
 import {
   CreateCategoryRequestI,
   CreateProductRequestI,
+  HSNCodesFilterByI,
   ItemTypeEnum,
   ProductI,
   ProductsFilterByI,
@@ -11,6 +12,8 @@ import { ProductModel } from "../models/product.model";
 import { MongooseError, SortOrder, Types } from "mongoose";
 import { CategoryModel } from "../models/category.model";
 import { ApiError } from "../utils/ApiHelper";
+import { SaccodeModel } from "../models/sacCodes.model";
+import { HsncodeModel } from "../models/hsnCodes.model";
 
 @injectable()
 export class ProductsRepo {
@@ -260,5 +263,80 @@ export class ProductsRepo {
       { isDeleted: true }
     );
     return deletedResponse;
+  }
+
+  async getSACCodes(
+    page: number,
+    pageSize: number,
+    sort?: SortI,
+    filterBy?: HSNCodesFilterByI
+  ) {
+    let sortBy: { [key: string]: SortOrder };
+    if (!sort?.sortBy) {
+      sortBy = { _id: -1 };
+    } else {
+      sortBy = { [sort.sortBy]: sort.sortOrder ? sort.sortOrder : "asc" };
+    }
+    console.log(sortBy);
+    const skipCount = (page - 1) * pageSize;
+    let query = SaccodeModel.find().where({});
+    let countQuery = SaccodeModel.find().where({});
+    if (filterBy?.search) {
+      const searchKeyword = filterBy.search;
+      const regex = new RegExp(searchKeyword, "i");
+      let searchQuery = {};
+      console.log(searchQuery);
+      query = query.where(searchQuery);
+      countQuery = countQuery.where(searchQuery);
+    }
+    const hsnCodes = await query
+      .sort(sortBy)
+      .skip(skipCount)
+      .limit(pageSize)
+      .exec();
+    const totalCount = await countQuery.countDocuments().exec();
+    return {
+      hsnCodes,
+      totalCount,
+    };
+  }
+
+  async getHSNCodes(
+    page: number,
+    pageSize: number,
+    sort?: SortI,
+    filterBy?: HSNCodesFilterByI
+  ) {
+    let sortBy: { [key: string]: SortOrder };
+    if (!sort?.sortBy) {
+      sortBy = { _id: -1 };
+    } else {
+      sortBy = { [sort.sortBy]: sort.sortOrder ? sort.sortOrder : "asc" };
+    }
+    console.log(sortBy);
+    const skipCount = (page - 1) * pageSize;
+    let query = HsncodeModel.find().where({});
+    let countQuery = HsncodeModel.find().where({});
+    if (filterBy?.search) {
+      const searchKeyword = filterBy.search;
+      const searchQuery = {
+        $or: [
+          { code: { $regex: searchKeyword, $options: "i" } },
+          { description: { $regex: searchKeyword, $options: "i" } },
+        ],
+      };
+      query = query.where(searchQuery);
+      countQuery = countQuery.where(searchQuery);
+    }
+    const hsnCodes = await query
+      .sort(sortBy)
+      .skip(skipCount)
+      .limit(pageSize)
+      .exec();
+    const totalCount = await countQuery.countDocuments().exec();
+    return {
+      hsnCodes,
+      totalCount,
+    };
   }
 }

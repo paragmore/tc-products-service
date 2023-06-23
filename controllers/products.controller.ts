@@ -11,7 +11,10 @@ import {
   CreateProductRequestI,
   DeleteProductsRequestI,
   GetCategoriesQueryParamsI,
+  GetHSNCodesParams,
+  GetHSNCodesQueryParamsI,
   GetProductsQueryParamsI,
+  ItemTypeEnum,
   UpdateProductRequestI,
 } from "../types/types";
 import { isValidObjectId } from "mongoose";
@@ -334,5 +337,62 @@ export class ProductsController {
       //@ts-ignore
       return ApiHelper.callFailed(reply, error.message, 500);
     }
+  };
+
+  getHSNCodes: ApiHelperHandler<
+    {},
+    GetHSNCodesQueryParamsI,
+    {},
+    GetHSNCodesParams,
+    IReply
+  > = async (request, reply) => {
+    const { query, params } = request;
+    const pageSize = (query.pageSize && parseInt(query.pageSize)) || 10;
+    const page = (query.page && parseInt(query.page)) || 1;
+    const nextPage = page + 1;
+    const previousPage = page - 1;
+    const { sortBy, sortOrder, search } = query;
+
+    if (!Object.values(ItemTypeEnum).includes(params.type)) {
+      return ApiHelper.callFailed(
+        reply,
+        "Please provide correct party type",
+        400
+      );
+    }
+
+    const filterBy = {
+      search,
+    };
+    const hsnCodesResponse = await this.productsService.getHSNCodes(
+      params.type,
+      page,
+      pageSize,
+      {
+        sortBy,
+        sortOrder,
+      },
+      filterBy
+    );
+    if (hsnCodesResponse instanceof ApiError) {
+      ApiHelper.callFailed(
+        reply,
+        hsnCodesResponse.message,
+        hsnCodesResponse.code
+      );
+      return;
+    }
+    const response = {
+      hsnCodes: hsnCodesResponse.hsnCodes,
+      pagination: {
+        pageSize,
+        page,
+        nextPage,
+        previousPage,
+        totalPages: Math.ceil(hsnCodesResponse.totalCount / pageSize),
+        totalResults: hsnCodesResponse.totalCount,
+      },
+    };
+    ApiHelper.success(reply, response);
   };
 }

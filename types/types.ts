@@ -174,3 +174,18 @@ export interface DeleteProductsRequestI {
   storeId: string;
   productIds: string[];
 }
+
+export interface HSNCodesFilterByQueryI {
+  search: string;
+}
+
+export interface HSNCodesFilterByI {
+  search: string;
+}
+export interface GetHSNCodesQueryParamsI
+  extends HSNCodesFilterByQueryI,
+    PaginationQueryParamsI {}
+
+export interface GetHSNCodesParams {
+  type: ItemTypeEnum;
+}

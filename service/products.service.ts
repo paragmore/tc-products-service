@@ -3,6 +3,8 @@ import { ProductsRepo } from "../repo/products.repo";
 import {
   CreateCategoryRequestI,
   CreateProductRequestI,
+  HSNCodesFilterByI,
+  ItemTypeEnum,
   ProductsFilterByI,
   SortI,
   UnitI,
@@ -144,6 +146,37 @@ export class ProductsService {
       return response;
     } catch (error) {
       console.log("softDeleteProducts service", error);
+      return new ApiError("Something went wrong, Please try again", 500);
+    }
+  }
+
+  async getHSNCodes(
+    type: ItemTypeEnum,
+    page: number,
+    pageSize: number,
+    sort?: SortI,
+    filterBy?: HSNCodesFilterByI
+  ) {
+    try {
+      if (type === ItemTypeEnum.PRODUCT) {
+        return await this.productsRepo.getHSNCodes(
+          page,
+          pageSize,
+          sort,
+          filterBy
+        );
+      }
+      if (type === ItemTypeEnum.SERVICE) {
+        return await this.productsRepo.getSACCodes(
+          page,
+          pageSize,
+          sort,
+          filterBy
+        );
+      }
+      return new ApiError("Party Type not found", 500);
+    } catch (error) {
+      console.log("getAllStoreParties service", error);
       return new ApiError("Something went wrong, Please try again", 500);
     }
   }

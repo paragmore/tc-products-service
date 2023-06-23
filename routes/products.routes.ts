@@ -8,6 +8,8 @@ import {
   CreateProductRequestI,
   DeleteProductsRequestI,
   GetCategoriesQueryParamsI,
+  GetHSNCodesParams,
+  GetHSNCodesQueryParamsI,
   GetProductsQueryParamsI,
   UpdateProductRequestI,
 } from "../types/types";
@@ -68,5 +70,11 @@ export default async (app: FastifyInstance) => {
     app,
     "/delete",
     productsController.softDeleteProducts.bind(productsController)
+  );
+
+  ApiHelper.get<GetHSNCodesQueryParamsI, GetHSNCodesParams, {}>(
+    app,
+    "/hsnCodes/:type",
+    productsController.getHSNCodes.bind(productsController)
   );
 };
