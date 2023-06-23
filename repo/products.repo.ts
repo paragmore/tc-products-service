@@ -283,9 +283,12 @@ export class ProductsRepo {
     let countQuery = SaccodeModel.find().where({});
     if (filterBy?.search) {
       const searchKeyword = filterBy.search;
-      const regex = new RegExp(searchKeyword, "i");
-      let searchQuery = {};
-      console.log(searchQuery);
+      const searchQuery = {
+        $or: [
+          { code: { $regex: searchKeyword, $options: "i" } },
+          { description: { $regex: searchKeyword, $options: "i" } },
+        ],
+      };
       query = query.where(searchQuery);
       countQuery = countQuery.where(searchQuery);
     }
