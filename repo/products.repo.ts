@@ -219,6 +219,8 @@ export class ProductsRepo {
     }
 
     const products = await query
+      .collation({ locale: "en", strength: 2 }) // Using English language rules with case-insensitivity
+
       .sort(sortBy)
       .skip(skipCount)
       .limit(pageSize)
@@ -247,6 +249,7 @@ export class ProductsRepo {
     let query = CategoryModel.find().where({ storeId });
     let countQuery = CategoryModel.find().where({ storeId });
     const categories = await query
+      .collation({ locale: "en", strength: 2 }) // Using English language rules with case-insensitivity
       .sort(sortBy)
       .skip(skipCount)
       .limit(pageSize)
@@ -293,6 +296,8 @@ export class ProductsRepo {
       countQuery = countQuery.where(searchQuery);
     }
     const hsnCodes = await query
+      .collation({ locale: "en", strength: 2 }) // Using English language rules with case-insensitivity
+
       .sort(sortBy)
       .skip(skipCount)
       .limit(pageSize)
@@ -332,6 +337,8 @@ export class ProductsRepo {
       countQuery = countQuery.where(searchQuery);
     }
     const hsnCodes = await query
+      .collation({ locale: "en", strength: 2 }) // Using English language rules with case-insensitivity
+
       .sort(sortBy)
       .skip(skipCount)
       .limit(pageSize)
