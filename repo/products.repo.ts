@@ -99,27 +99,33 @@ export class ProductsRepo {
       lowStock,
     } = product;
 
-    const updatedProduct = await ProductModel.findByIdAndUpdate(id, {
-      name,
-      description,
-      sellsPrice,
-      purchasePrice,
-      category,
-      variants,
-      heroImage,
-      images,
-      quantity,
-      discounts,
-      hsnCode,
-      taxIncluded,
-      unit,
-      purchaseUnit,
-      gstPercentage,
-      deliveryTime,
-      isInventory,
-      inventoryProducts,
-      lowStock,
-    });
+    const updatedProduct = await ProductModel.findByIdAndUpdate(
+      id,
+      {
+        name,
+        description,
+        sellsPrice,
+        purchasePrice,
+        category,
+        variants,
+        heroImage,
+        images,
+        quantity,
+        discounts,
+        hsnCode,
+        taxIncluded,
+        unit,
+        purchaseUnit,
+        gstPercentage,
+        deliveryTime,
+        isInventory,
+        inventoryProducts,
+        lowStock,
+      },
+      {
+        new: true, // This option returns the updated document
+      }
+    );
 
     return updatedProduct;
   }
