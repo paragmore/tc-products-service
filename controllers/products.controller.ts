@@ -7,6 +7,7 @@ import {
   IReply,
 } from "../utils/ApiHelper";
 import {
+  BulkProductsUploadRequestI,
   CreateCategoryRequestI,
   CreateProductRequestI,
   DeleteProductsRequestI,
@@ -310,6 +311,54 @@ export class ProductsController {
       );
     }
     ApiHelper.success(reply, productsResponse);
+  };
+
+  bulkProductsUpload: ApiHelperHandler<
+    BulkProductsUploadRequestI,
+    {},
+    {},
+    {},
+    IReply
+  > = async (request, reply) => {
+    const { body } = request;
+    if (!body || !body.storeId || !body.products) {
+      return ApiHelper.missingParameters(reply);
+    }
+    body.products.map((product) => {
+      if (
+        !product.name ||
+        !product.sellsPrice ||
+        !product.unit ||
+        !(typeof product.asPerMargin === "boolean") ||
+        (product.asPerMargin === true && !product.margin)
+      ) {
+        return ApiHelper.callFailed(
+          reply,
+          "Please pass correct and complete data in the sheet"
+        );
+      }
+    });
+    const isValidStoreId = isValidObjectId(body.storeId);
+    if (!isValidStoreId) {
+      return ApiHelper.callFailed(reply, "Please pass valid storeId", 400);
+    }
+    try {
+      const deleteResponse = await this.productsService.bulkProductsUpload(
+        body.storeId,
+        body.products
+      );
+      if (deleteResponse instanceof ApiError) {
+        return ApiHelper.callFailed(
+          reply,
+          deleteResponse.message,
+          deleteResponse.code
+        );
+      }
+      return ApiHelper.success(reply, deleteResponse);
+    } catch (error) {
+      //@ts-ignore
+      return ApiHelper.callFailed(reply, error.message, 500);
+    }
   };
 
   softDeleteProducts: ApiHelperHandler<

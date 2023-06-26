@@ -1,6 +1,7 @@
 import { inject, injectable } from "inversify";
 import { ProductsRepo } from "../repo/products.repo";
 import {
+  BulkProductUploadSingleRequestI,
   CreateCategoryRequestI,
   CreateProductRequestI,
   HSNCodesFilterByI,
@@ -135,6 +136,18 @@ export class ProductsService {
       console.log("getAllStoreCategories service", error);
       return new ApiError("Something went wrong, Please try again", 500);
     }
+  }
+
+  async bulkProductsUpload(
+    storeId: Types.ObjectId,
+    products: BulkProductUploadSingleRequestI[]
+  ) {
+    const uploadPromises: any[] = [];
+    products.map(async (product) => {
+      uploadPromises.push(this.createProduct({ ...product, storeId }));
+    });
+
+    return await Promise.all(uploadPromises);
   }
 
   async softDeleteProducts(storeId: string, productIds: string[]) {

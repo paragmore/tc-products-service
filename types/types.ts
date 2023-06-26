@@ -132,6 +132,32 @@ export interface CreateProductRequestI {
   asPerMargin: boolean;
 }
 
+export interface BulkProductUploadSingleRequestI {
+  name: string;
+  description?: string;
+  sellsPrice: number;
+  purchasePrice?: number;
+  category?: Types.ObjectId[];
+  variants?: VariantI[];
+  heroImage?: string;
+  images?: string[];
+  quantity: number;
+  discounts?: DiscountI[];
+  hsnCode?: string;
+  taxIncluded?: boolean;
+  unit: string;
+  purchaseUnitName?: string;
+  purchaseUnitConversion?: number;
+  gstPercentage?: number;
+  deliveryTime?: string;
+  isInventory?: boolean;
+  inventoryProducts?: InventoryProductI[];
+  lowStock?: number;
+  isService: boolean;
+  margin?: number;
+  asPerMargin: boolean;
+}
+
 export interface ProductsFilterByI {
   category?: string[];
   minSellsPrice?: number;
@@ -179,6 +205,11 @@ export interface PaginationQueryParamsI {
 export interface DeleteProductsRequestI {
   storeId: string;
   productIds: string[];
+}
+
+export interface BulkProductsUploadRequestI {
+  storeId: Types.ObjectId;
+  products: BulkProductUploadSingleRequestI[];
 }
 
 export interface HSNCodesFilterByQueryI {

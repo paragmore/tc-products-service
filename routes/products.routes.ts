@@ -4,6 +4,7 @@ import { ProductsController } from "../controllers/products.controller";
 import container from "../inversify.config";
 import { ApiHelper } from "../utils/ApiHelper";
 import {
+  BulkProductsUploadRequestI,
   CreateCategoryRequestI,
   CreateProductRequestI,
   DeleteProductsRequestI,
@@ -34,6 +35,11 @@ export default async (app: FastifyInstance) => {
     app,
     "/create",
     productsController.createProduct.bind(productsController)
+  );
+  ApiHelper.post<BulkProductsUploadRequestI, {}, {}, {}>(
+    app,
+    "/bulk/create",
+    productsController.bulkProductsUpload.bind(productsController)
   );
 
   ApiHelper.post<CreateCategoryRequestI, {}, {}, {}>(
