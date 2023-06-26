@@ -46,6 +46,8 @@ export class ProductsRepo {
       inventoryProducts,
       lowStock,
       isService,
+      margin,
+      asPerMargin,
     } = product;
 
     const createdProduct = await ProductModel.create({
@@ -71,6 +73,8 @@ export class ProductsRepo {
       inventoryProducts,
       lowStock,
       isService,
+      margin,
+      asPerMargin,
     });
 
     return createdProduct;
@@ -97,6 +101,8 @@ export class ProductsRepo {
       isInventory,
       inventoryProducts,
       lowStock,
+      margin,
+      asPerMargin,
     } = product;
 
     const updatedProduct = await ProductModel.findByIdAndUpdate(
@@ -121,6 +127,8 @@ export class ProductsRepo {
         isInventory,
         inventoryProducts,
         lowStock,
+        margin,
+        asPerMargin,
       },
       {
         new: true, // This option returns the updated document

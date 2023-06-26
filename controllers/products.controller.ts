@@ -32,9 +32,9 @@ export class ProductsController {
         !body.storeId ||
         !body.name ||
         !body.sellsPrice ||
-        !body.category ||
-        !(body.quantity || body.isService) ||
-        !body.unit
+        !body.unit ||
+        !(typeof body.asPerMargin === "boolean") ||
+        (body.asPerMargin === true && !body.margin)
       ) {
         return ApiHelper.missingParameters(reply);
       }
@@ -44,16 +44,18 @@ export class ProductsController {
         return ApiHelper.callFailed(reply, "Please pass valid storeId", 400);
       }
 
-      body.category.map((cat) => {
-        const isValidCategory = isValidObjectId(cat);
-        if (!isValidCategory) {
-          return ApiHelper.callFailed(
-            reply,
-            `Please pass valid categoryId: ${cat}`,
-            400
-          );
-        }
-      });
+      if (body.category) {
+        body.category.map((cat) => {
+          const isValidCategory = isValidObjectId(cat);
+          if (!isValidCategory) {
+            return ApiHelper.callFailed(
+              reply,
+              `Please pass valid categoryId: ${cat}`,
+              400
+            );
+          }
+        });
+      }
       try {
         const response = await this.productsService.createProduct(body);
         return ApiHelper.success(reply, response);
@@ -66,7 +68,12 @@ export class ProductsController {
   updateProduct: ApiHelperHandler<UpdateProductRequestI, {}, {}, {}, IReply> =
     async (request, reply) => {
       const { body } = request;
-      if (!body || !body.productId) {
+      if (
+        !body ||
+        !body.productId ||
+        !(typeof body.asPerMargin === "boolean") ||
+        (body.asPerMargin === true && !body.margin)
+      ) {
         return ApiHelper.missingParameters(reply);
       }
 

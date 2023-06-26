@@ -51,6 +51,8 @@ interface ProductI {
   lowStock?: number;
   isService?: boolean;
   isDeleted?: boolean;
+  margin?: number;
+  asPerMargin: boolean;
 }
 
 export interface InventoryProductI {
@@ -100,6 +102,8 @@ export interface UpdateProductRequestI {
   isInventory?: boolean;
   inventoryProducts?: InventoryProductI[];
   lowStock?: number;
+  margin?: number;
+  asPerMargin: boolean;
 }
 export interface CreateProductRequestI {
   storeId: Types.ObjectId;
@@ -107,7 +111,7 @@ export interface CreateProductRequestI {
   description?: string;
   sellsPrice: number;
   purchasePrice?: number;
-  category: Types.ObjectId[];
+  category?: Types.ObjectId[];
   variants?: VariantI[];
   heroImage?: string;
   images?: string[];
@@ -124,6 +128,8 @@ export interface CreateProductRequestI {
   inventoryProducts?: InventoryProductI[];
   lowStock?: number;
   isService: boolean;
+  margin?: number;
+  asPerMargin: boolean;
 }
 
 export interface ProductsFilterByI {

@@ -86,13 +86,18 @@ const productSchema = new Schema({
     type: Number,
     required: true,
   },
+  margin: {
+    type: Number,
+  },
+  asPerMargin: {
+    type: Boolean,
+  },
   purchasePrice: {
     type: Number,
   },
   category: {
     type: [Schema.Types.ObjectId],
     ref: "Category",
-    required: true,
   },
   variants: [variantSchema], // Array of variants
   heroImage: {
@@ -108,9 +113,6 @@ const productSchema = new Schema({
   },
   quantity: {
     type: Number,
-    required: function () {
-      return !(this as any).isService;
-    },
   },
   lowStock: {
     type: Number,
