@@ -10,6 +10,7 @@ import {
   BulkProductsUploadRequestI,
   CreateCategoryRequestI,
   CreateProductRequestI,
+  DeleteCategoriesRequestI,
   DeleteProductsRequestI,
   GetCategoriesQueryParamsI,
   GetHSNCodesParams,
@@ -380,6 +381,40 @@ export class ProductsController {
       const deleteResponse = await this.productsService.softDeleteProducts(
         body.storeId,
         body.productIds
+      );
+      if (deleteResponse instanceof ApiError) {
+        return ApiHelper.callFailed(
+          reply,
+          deleteResponse.message,
+          deleteResponse.code
+        );
+      }
+      return ApiHelper.success(reply, deleteResponse);
+    } catch (error) {
+      //@ts-ignore
+      return ApiHelper.callFailed(reply, error.message, 500);
+    }
+  };
+
+  softDeleteCategories: ApiHelperHandler<
+    DeleteCategoriesRequestI,
+    {},
+    {},
+    {},
+    IReply
+  > = async (request, reply) => {
+    const { body } = request;
+    if (!body || !body.storeId || !body.categoryIds) {
+      return ApiHelper.missingParameters(reply);
+    }
+    const isValidStoreId = isValidObjectId(body.storeId);
+    if (!isValidStoreId) {
+      return ApiHelper.callFailed(reply, "Please pass valid storeId", 400);
+    }
+    try {
+      const deleteResponse = await this.productsService.softDeleteCategories(
+        body.storeId,
+        body.categoryIds
       );
       if (deleteResponse instanceof ApiError) {
         return ApiHelper.callFailed(

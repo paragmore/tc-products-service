@@ -18,6 +18,9 @@ const categorySchema = new Schema({
     required: true,
     unique: true,
   },
+  isDeleted: {
+    type: Boolean,
+  },
 });
 
 export const CategoryModel = mongoose.model("Category", categorySchema);

@@ -7,6 +7,7 @@ import {
   BulkProductsUploadRequestI,
   CreateCategoryRequestI,
   CreateProductRequestI,
+  DeleteCategoriesRequestI,
   DeleteProductsRequestI,
   GetCategoriesQueryParamsI,
   GetHSNCodesParams,
@@ -76,6 +77,12 @@ export default async (app: FastifyInstance) => {
     app,
     "/delete",
     productsController.softDeleteProducts.bind(productsController)
+  );
+
+  ApiHelper.post<DeleteCategoriesRequestI, {}, {}, {}>(
+    app,
+    "/delete/category",
+    productsController.softDeleteCategories.bind(productsController)
   );
 
   ApiHelper.get<GetHSNCodesQueryParamsI, GetHSNCodesParams, {}>(

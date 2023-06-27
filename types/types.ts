@@ -207,6 +207,11 @@ export interface DeleteProductsRequestI {
   productIds: string[];
 }
 
+export interface DeleteCategoriesRequestI {
+  storeId: string;
+  categoryIds: string[];
+}
+
 export interface BulkProductsUploadRequestI {
   storeId: Types.ObjectId;
   products: BulkProductUploadSingleRequestI[];

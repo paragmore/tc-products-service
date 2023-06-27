@@ -260,8 +260,14 @@ export class ProductsRepo {
     }
     console.log(sortBy);
     const skipCount = (page - 1) * pageSize;
-    let query = CategoryModel.find().where({ storeId });
-    let countQuery = CategoryModel.find().where({ storeId });
+    let query = CategoryModel.find().where({
+      storeId,
+      isDeleted: { $ne: true },
+    });
+    let countQuery = CategoryModel.find().where({
+      storeId,
+      isDeleted: { $ne: true },
+    });
     const categories = await query
       .collation({ locale: "en", strength: 2 }) // Using English language rules with case-insensitivity
       .sort(sortBy)
@@ -277,6 +283,14 @@ export class ProductsRepo {
   async softDeleteProducts(storeId: string, productIds: string[]) {
     const deletedResponse = await ProductModel.updateMany(
       { storeId, _id: { $in: [...productIds] } },
+      { isDeleted: true }
+    );
+    return deletedResponse;
+  }
+
+  async softDeleteCategories(storeId: string, categoryIds: string[]) {
+    const deletedResponse = await CategoryModel.updateMany(
+      { storeId, _id: { $in: [...categoryIds] } },
       { isDeleted: true }
     );
     return deletedResponse;

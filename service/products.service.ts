@@ -163,6 +163,19 @@ export class ProductsService {
     }
   }
 
+  async softDeleteCategories(storeId: string, categoryIds: string[]) {
+    try {
+      const response = await this.productsRepo.softDeleteCategories(
+        storeId,
+        categoryIds
+      );
+      return response;
+    } catch (error) {
+      console.log("softDeleteCategories service", error);
+      return new ApiError("Something went wrong, Please try again", 500);
+    }
+  }
+
   async getHSNCodes(
     type: ItemTypeEnum,
     page: number,
