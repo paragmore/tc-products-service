@@ -69,6 +69,27 @@ const unitSchema = new Schema({
   },
 });
 
+const accountSchema = new Schema({
+  sales: { type: String, required: true },
+  purchase: { type: String, required: true },
+});
+
+const historyLogSchema = new Schema({
+  date: {
+    type: Date,
+    required: true,
+  },
+  changes: {
+    type: String,
+    required: true,
+  },
+});
+
+const productHistorySchema = new Schema({
+  sellsPrice: [historyLogSchema],
+  gstPercentage: [historyLogSchema],
+});
+
 const productSchema = new Schema({
   storeId: {
     type: Schema.Types.ObjectId,
@@ -129,6 +150,9 @@ const productSchema = new Schema({
   gstPercentage: {
     type: Number,
   },
+  cess: {
+    type: Number,
+  },
   deliveryTime: {
     type: String,
   },
@@ -141,6 +165,17 @@ const productSchema = new Schema({
   },
   isDeleted: {
     type: Schema.Types.Boolean,
+  },
+  account: {
+    type: accountSchema,
+    required: true,
+  },
+  taxPreference: {
+    type: String,
+    required: true,
+  },
+  history: {
+    type: productHistorySchema,
   },
 });
 
