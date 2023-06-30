@@ -51,6 +51,7 @@ export class ProductsRepo {
       margin,
       asPerMargin,
       account,
+      additionalFields,
     } = product;
 
     const createdProduct = await ProductModel.create({
@@ -80,6 +81,7 @@ export class ProductsRepo {
       margin,
       asPerMargin,
       account,
+      additionalFields,
     });
 
     return createdProduct;
@@ -110,6 +112,7 @@ export class ProductsRepo {
       margin,
       asPerMargin,
       account,
+      additionalFields,
     } = product;
 
     const updatedProduct = await ProductModel.findByIdAndUpdate(
@@ -138,6 +141,7 @@ export class ProductsRepo {
         margin,
         asPerMargin,
         account,
+        additionalFields,
       },
       {
         new: true, // This option returns the updated document

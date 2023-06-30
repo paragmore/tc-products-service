@@ -90,6 +90,15 @@ const productHistorySchema = new Schema({
   gstPercentage: [historyLogSchema],
 });
 
+const additionalFieldSchema = new Schema({
+  key: {
+    type: String,
+  },
+  value: {
+    type: String,
+  },
+});
+
 const productSchema = new Schema({
   storeId: {
     type: Schema.Types.ObjectId,
@@ -177,6 +186,7 @@ const productSchema = new Schema({
   history: {
     type: productHistorySchema,
   },
+  additionalFields: [additionalFieldSchema],
 });
 
 export const ProductModel = mongoose.model("Product", productSchema);

@@ -55,6 +55,7 @@ interface ProductI {
   asPerMargin: boolean;
   cess?: number;
   account: ProductsAccountInterfaceI;
+  additionalFields?: AdditionalFieldI[];
 }
 
 export interface ProductsAccountInterfaceI {
@@ -87,6 +88,10 @@ export interface CategoryI {
 
 export interface CreateCategoryRequestI extends CategoryI {}
 
+export interface AdditionalFieldI {
+  key: string;
+  value: string;
+}
 export interface UpdateProductRequestI {
   productId: Types.ObjectId;
   name: string;
@@ -113,6 +118,7 @@ export interface UpdateProductRequestI {
   margin?: number;
   asPerMargin: boolean;
   account: ProductsAccountInterfaceI;
+  additionalFields?: AdditionalFieldI[];
 }
 export interface CreateProductRequestI {
   storeId: Types.ObjectId;
@@ -141,6 +147,7 @@ export interface CreateProductRequestI {
   asPerMargin: boolean;
   cess?: number;
   account: ProductsAccountInterfaceI;
+  additionalFields?: AdditionalFieldI[];
 }
 
 export interface BulkProductUploadSingleRequestI {
