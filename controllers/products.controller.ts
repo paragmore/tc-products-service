@@ -205,7 +205,7 @@ export class ProductsController {
     const page = (query.page && parseInt(query.page)) || 1;
     const nextPage = page + 1;
     const previousPage = page - 1;
-    const { sortBy, sortOrder } = query;
+    const { sortBy, sortOrder, search } = query;
 
     const categoriesResponse = await this.productsService.getAllStoreCategories(
       params.storeId,
@@ -214,6 +214,9 @@ export class ProductsController {
       {
         sortBy,
         sortOrder,
+      },
+      {
+        search,
       }
     );
     if (categoriesResponse instanceof ApiError) {

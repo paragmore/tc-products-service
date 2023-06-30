@@ -1,5 +1,6 @@
 import { injectable } from "inversify";
 import {
+  CategoriesFilterByI,
   CreateCategoryRequestI,
   CreateProductRequestI,
   HSNCodesFilterByI,
@@ -250,7 +251,8 @@ export class ProductsRepo {
     storeId: string,
     page: number,
     pageSize: number,
-    sort?: SortI
+    sort?: SortI,
+    filterBy?: CategoriesFilterByI
   ) {
     let sortBy: { [key: string]: SortOrder };
     if (!sort?.sortBy) {
@@ -268,6 +270,17 @@ export class ProductsRepo {
       storeId,
       isDeleted: { $ne: true },
     });
+    if (filterBy?.search) {
+      const searchKeyword = filterBy.search;
+      const searchQuery = {
+        $or: [
+          { name: { $regex: searchKeyword, $options: "i" } },
+          { description: { $regex: searchKeyword, $options: "i" } },
+        ],
+      };
+      query = query.where(searchQuery);
+      countQuery = countQuery.where(searchQuery);
+    }
     const categories = await query
       .collation({ locale: "en", strength: 2 }) // Using English language rules with case-insensitivity
       .sort(sortBy)

@@ -2,6 +2,7 @@ import { inject, injectable } from "inversify";
 import { ProductsRepo } from "../repo/products.repo";
 import {
   BulkProductUploadSingleRequestI,
+  CategoriesFilterByI,
   CreateCategoryRequestI,
   CreateProductRequestI,
   HSNCodesFilterByI,
@@ -122,14 +123,16 @@ export class ProductsService {
     storeId: string,
     page: number,
     pageSize: number,
-    sort?: SortI
+    sort?: SortI,
+    filterBy?: CategoriesFilterByI
   ) {
     try {
       const response = await this.productsRepo.getAllStoreCategories(
         storeId,
         page,
         pageSize,
-        sort
+        sort,
+        filterBy
       );
       return response;
     } catch (error) {

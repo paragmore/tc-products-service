@@ -193,7 +193,9 @@ export interface GetProductsQueryParamsI
   extends ProductsFilterByQueryI,
     PaginationQueryParamsI {}
 
-export interface GetCategoriesQueryParamsI extends PaginationQueryParamsI {}
+export interface GetCategoriesQueryParamsI
+  extends PaginationQueryParamsI,
+    CategoriesFilterByI {}
 
 export interface PaginationQueryParamsI {
   pageSize?: string;
@@ -222,6 +224,10 @@ export interface HSNCodesFilterByQueryI {
 }
 
 export interface HSNCodesFilterByI {
+  search: string;
+}
+
+export interface CategoriesFilterByI {
   search: string;
 }
 export interface GetHSNCodesQueryParamsI
