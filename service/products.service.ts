@@ -3,9 +3,11 @@ import { ProductsRepo } from "../repo/products.repo";
 import {
   BulkProductUploadSingleRequestI,
   CategoriesFilterByI,
+  CostOfGoodsSoldAccountTypeEnum,
   CreateCategoryRequestI,
   CreateProductRequestI,
   HSNCodesFilterByI,
+  IncomeAccountTypeEnum,
   ItemTypeEnum,
   ProductsFilterByI,
   SortI,
@@ -147,7 +149,16 @@ export class ProductsService {
   ) {
     const uploadPromises: any[] = [];
     products.map(async (product) => {
-      uploadPromises.push(this.createProduct({ ...product, storeId }));
+      uploadPromises.push(
+        this.createProduct({
+          ...product,
+          storeId,
+          account: {
+            sales: IncomeAccountTypeEnum.SALES,
+            purchase: CostOfGoodsSoldAccountTypeEnum.COST_OF_GOODS_SOLD,
+          },
+        })
+      );
     });
 
     return await Promise.all(uploadPromises);

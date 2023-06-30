@@ -41,6 +41,7 @@ export class ProductsRepo {
       unit,
       purchaseUnit,
       gstPercentage,
+      cess,
       deliveryTime,
       slug,
       isInventory,
@@ -49,6 +50,7 @@ export class ProductsRepo {
       isService,
       margin,
       asPerMargin,
+      account,
     } = product;
 
     const createdProduct = await ProductModel.create({
@@ -68,6 +70,7 @@ export class ProductsRepo {
       unit,
       purchaseUnit,
       gstPercentage,
+      cess,
       deliveryTime,
       slug,
       isInventory,
@@ -76,6 +79,7 @@ export class ProductsRepo {
       isService,
       margin,
       asPerMargin,
+      account,
     });
 
     return createdProduct;
@@ -98,12 +102,14 @@ export class ProductsRepo {
       unit,
       purchaseUnit,
       gstPercentage,
+      cess,
       deliveryTime,
       isInventory,
       inventoryProducts,
       lowStock,
       margin,
       asPerMargin,
+      account,
     } = product;
 
     const updatedProduct = await ProductModel.findByIdAndUpdate(
@@ -124,12 +130,14 @@ export class ProductsRepo {
         unit,
         purchaseUnit,
         gstPercentage,
+        cess,
         deliveryTime,
         isInventory,
         inventoryProducts,
         lowStock,
         margin,
         asPerMargin,
+        account,
       },
       {
         new: true, // This option returns the updated document

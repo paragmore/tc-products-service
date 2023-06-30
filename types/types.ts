@@ -53,6 +53,13 @@ interface ProductI {
   isDeleted?: boolean;
   margin?: number;
   asPerMargin: boolean;
+  cess?: number;
+  account: ProductsAccountInterfaceI;
+}
+
+export interface ProductsAccountInterfaceI {
+  sales: string;
+  purchase: string;
 }
 
 export interface InventoryProductI {
@@ -98,12 +105,14 @@ export interface UpdateProductRequestI {
   purchaseUnitName?: string;
   purchaseUnitConversion?: number;
   gstPercentage?: number;
+  cess?: number;
   deliveryTime?: string;
   isInventory?: boolean;
   inventoryProducts?: InventoryProductI[];
   lowStock?: number;
   margin?: number;
   asPerMargin: boolean;
+  account: ProductsAccountInterfaceI;
 }
 export interface CreateProductRequestI {
   storeId: Types.ObjectId;
@@ -130,6 +139,8 @@ export interface CreateProductRequestI {
   isService: boolean;
   margin?: number;
   asPerMargin: boolean;
+  cess?: number;
+  account: ProductsAccountInterfaceI;
 }
 
 export interface BulkProductUploadSingleRequestI {
@@ -156,6 +167,7 @@ export interface BulkProductUploadSingleRequestI {
   isService: boolean;
   margin?: number;
   asPerMargin: boolean;
+  cess?: number;
 }
 
 export interface ProductsFilterByI {
