@@ -56,6 +56,15 @@ interface ProductI {
   cess?: number;
   account: ProductsAccountInterfaceI;
   additionalFields?: AdditionalFieldI[];
+  taxPreference: TaxPreferenceEnum;
+}
+
+export enum TaxPreferenceEnum {
+  TAXABLE = "Taxable",
+  NON_TAXABLE = "Non-Taxable",
+  NON_GST_SUPPLY = "Non GST Supply",
+  NIL_RATED = "Nil Rated",
+  EXEMPT = "Exempt",
 }
 
 export interface ProductsAccountInterfaceI {
@@ -119,6 +128,7 @@ export interface UpdateProductRequestI {
   asPerMargin: boolean;
   account: ProductsAccountInterfaceI;
   additionalFields?: AdditionalFieldI[];
+  taxPreference: TaxPreferenceEnum;
 }
 export interface CreateProductRequestI {
   storeId: Types.ObjectId;
@@ -148,6 +158,7 @@ export interface CreateProductRequestI {
   cess?: number;
   account: ProductsAccountInterfaceI;
   additionalFields?: AdditionalFieldI[];
+  taxPreference: TaxPreferenceEnum;
 }
 
 export interface BulkProductUploadSingleRequestI {
@@ -175,6 +186,7 @@ export interface BulkProductUploadSingleRequestI {
   margin?: number;
   asPerMargin: boolean;
   cess?: number;
+  taxPreference: TaxPreferenceEnum;
 }
 
 export interface ProductsFilterByI {
